@@ -1,7 +1,6 @@
 package DXFMinimal;
 # just handles lines and polylines at the moment
 
-
 our $VERSION=0.01;
 
 sub new{
@@ -158,7 +157,7 @@ sub buildEntities{
 }
 
 sub entity{
-	my ($self,$entityType,$handle,$layer,$colour, $pointSet)=@_;
+	my ($self,$entityType,$handle,$layer,$colour, $pointSet,$extras)=@_;
 	if($entityType =~/polyline/i){
 		my $vertices="";
 		foreach my $pt (@$pointSet){
@@ -167,11 +166,34 @@ sub entity{
 		return join( "\n",(0,"LWPOLYLINE",5,$handle,330,"1F",100,"AcDbEntity",8,"Layer_$layer",100,"AcDbPolyline",
 		      $vertices));
 	}
+	if($entityType =~/spline/i){
+		my $vertices=coords(1,$$pointSet[-1]);
+		foreach my $pt (@$pointSet){
+			$vertices.=coords(1,$pt)
+		};
+		return join( "\n",(0,"SPLINE",5,$handle,330,"1F",100,"AcDbEntity",8,"Layer_$layer",100,"AcDbSpline",
+		   70,11,71,3,72,68,73,0,74,scalar @$pointSet,44,0.00001,
+		      $vertices));
+	}
 	elsif ($entityType =~/line/i){
 		if (scalar @$pointSet !=2){ warn "LINE requires 2 points"; return "";}
 		return join( "\n",(0,"LINE",5,$handle,100,"AcDbEntity",8,"Layer_$layer",62,$colour,100,"AcDbLine",
 		       coords(0,$$pointSet[0]).coords(1,$$pointSet[1])));
-    }	
+    }
+    elsif ($entityType =~/circle/i){
+		@points=@$pointSet;
+		if (scalar @points !=2){ warn "CIRCLE requires one point and one radius"; return "";}
+		
+		return join( "\n",(0,"CIRCLE",5,$handle,100,"AcDbEntity",8,"Layer_$layer",62,$colour,100,"AcDbCircle",
+		       40,$points[1], coords(0,$points[0]) ));
+    }
+    elsif ($entityType =~/text/i){
+		@points=@$pointSet;
+		if (scalar @points !=3){ warn "TEXT requires one point, one size, one string"; return "";}
+		
+		return join( "\n",(0,"TEXT",5,$handle,100,"AcDbEntity",8,"Layer_$layer",62,$colour,100,"AcDbText",
+		       40,$points[1],41,1,1,$points[2],coords(0,$points[0]) ));
+    }		
 	elsif($entityType =~/face/i){
 		my $vertices="";
 		my @points=@$pointSet;
