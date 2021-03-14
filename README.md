@@ -7,11 +7,11 @@ DXF utilities are rather limited in Perl.  These modules teach me CAD while allo
 
 ### CAD::Gear.pm
 
-Draws gears. These are currently crude, while I learn the mathematics of drawing an involute gear profile.  It can outputs to SVG, but will allow the "borrowing" of the points generated for other uses.
+Draws gears. These are currently crude, while I learn the mathematics of drawing an involute gear profile.  It can outputs to SVG, but will allow the "borrowing" of the points generated for other uses.  Currently allows exporting of data ina "points-from-file" format that can be imported into VariCAD using 2dff.
 
 ### CAD::DXF::Minimal
 
-Generates a valid minimalist DXF file. Currently only handles lines and polylines; other entities will be added on request, if time permits, and it becomes necessary to do so.
+Generates a valid minimalist DXF file. Currently only handles lines, polylines, splines, text; other entities will be added on request, if time permits, and it becomes necessary to do so. One may generate complex drawings, in the future, but depends on interest.
 
 ```
 #!/usr/bin/perl
@@ -26,10 +26,11 @@ $gear->save("test.svg");
 
 my $dxf=DXFMinimal->new();
 
-$dxf->addEntity("polyline",1,4,[[23,42],[70,42],[70,52],[23,52],[23,42]]);
-$dxf->addEntity("line",1,7,[[23,12,0],[70,12,0]]);
-$dxf->addEntity("line",1,10,[[23,22,0],[70,22,0]]);
 $dxf->addEntity("line",1,4,[[23,32,0],[70,32,0]]);
 $dxf->addEntity("polyline",1,4,$gear->{points});
 $dxf->save("Test.dxf");
 ```
+### example output
+
+![dxf vs 2dff](https://user-images.githubusercontent.com/34284663/111084811-3332c880-850c-11eb-81b2-c514f8598638.png)
+
