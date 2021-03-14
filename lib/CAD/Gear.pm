@@ -37,30 +37,6 @@ sub angleToXAxis{ #angle of vector to origin
 	return ($$a[1]/abs($$a[1]))*acos($$a[0]/modulo($a))
 }
 
-sub printVec{
-	my $a=shift;
-	if (ref $$a[0]){
-		foreach my $pt (@$a){
-			printVec($pt)
-		}
-	}
-	else {print"(".$$a[0].",".$$a[1],")\n" }
-}
-
-sub listVec{
-	my $a=shift;
-	my $list="";
-	if (ref $$a[0] ne "ARRAY"){  # a single point is a two elemnt arrays
-		$list.= sprintf " %.2f,%.2f", $$a[0],$$a[1];
-	}
-	else{
-		foreach my $pt (@$a){   # a list of points is array of two element arrays
-			$list.=listVec($pt)
-		}
-	}
-	return $list
-}
-
 sub rotatePoints{ # rotate a set of points by angle, about a center
 	my($P, $angle, $center)=@_;
 	my @R=();
@@ -97,7 +73,12 @@ sub save{
 	my ($self,$fileName,$fileType)=@_;
 	$fileType //="svg";
 	open(my $FH, '>', $fileName) or die $!;
-	if ($fileType eq"svg") {print $FH $self->svg("polygon")};
+	if ($fileType eq"svg")     {print $FH $self->svg("polyline")}
+	elsif ($fileType eq "pff") {
+		foreach my $pt (@{$self->{points}}){
+			print $FH "$$pt[0],$$pt[1],"
+		}
+	}
 	close($FH);
 }
 	
@@ -129,6 +110,7 @@ sub generate{     # generate a pointset for a gear;
 		push @polyList,@$profile;
 		$profile=rotatePoints($profile,$self->{data}{turnAngle});
 	}
+	@polyList=(@polyList,$polyList[0]);
 	$self->{points}=\@polyList;
 }
 
@@ -147,7 +129,9 @@ sub profileMaker{
 	}	
 }
 
-# convert a set of 2D points into an SVG shape, return the shape
+
+# convert a set of 2D points into an SVG shape, return the ghape in a view box
+# sized to accommodate the gear
 
 sub svg{
   my ($self,$type)=@_;
@@ -166,7 +150,7 @@ sub svgItem{   # creates an svg polyline or polygon or group of lines from point
 	@points=@{$self->{points}};
 	
 	# polygons close themselves, poly lines and lines need that extra closing line
-	@points=($points[-1],@points) if ($type=~/line/); 
+	#@points=($points[-1],@points) if ($type=~/line/); 
 	
 	if ($type =~/poly/i){
 		my $i=0; #counter for making output easier to check 
