@@ -11,7 +11,7 @@ Draws gears. These are currently crude, while I learn the mathematics of drawing
 
 ### CAD::DXF::Minimal
 
-Generates a valid minimalist DXF file. Currently only handles lines, polylines, splines, text; other entities will be added on request, if time permits, and it becomes necessary to do so. One may generate complex drawings, in the future, but depends on interest.  For more details see [DXFMinimal.md](DXFMinimal)
+Generates a valid minimalist DXF file. Currently only handles lines, polylines, splines, text; other entities will be added on request, if time permits, and it becomes necessary to do so. One may generate complex drawings, in the future, but depends on interest.  For more details see [DXFMinimal](DXFMinimal.md)
 
 ```
 #!/usr/bin/perl
