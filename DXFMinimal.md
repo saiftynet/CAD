@@ -1,6 +1,6 @@
 ## DXFMinimal
 
-This is minimalist DXF creator in PERL. Objective is to be able to create 2d DXF Files which are valid and that can be read by most CAD applications.  DXF File format is reasonably well documented and not to difficult to reverse engineer, and the data is stored in human readable, newline separated, paired data groups, which makes for easy manipulation in PERL.  DXF creation is not too difficult in Python thanks to [Mozman's](https://github.com/mozman/ezdxf) efforts.  My attempt targets Perl, but is deliberately significantly more limited for greater simplicity.  It handles TEXT, LINE, LWPOLYLINE, HATCH, ARC, CIRCLE, ELLIPSE entities and more will be added as time permits.. borrowing a little form his example minimalist DXF files.
+This is minimalist DXF creator in PERL. Objective is to be able to create 2d DXF Files which are valid and that can be read by most CAD applications.  DXF File format is reasonably well documented and not to difficult to reverse engineer, and the data is stored in human readable, newline separated, paired data groups, which makes for easy manipulation in PERL.  DXF creation is not too difficult in Python thanks to [Mozman's](https://github.com/mozman/ezdxf) efforts.  My attempt targets Perl, but is deliberately significantly more limited for greater simplicity.  It handles TEXT, LINE, LWPOLYLINE, HATCH, ARC, CIRCLE, ELLIPSE entities and more will be added as time permits; borrowing a little from his example minimalist DXF files.
 
 ```
 #!/usr/bin/perl
